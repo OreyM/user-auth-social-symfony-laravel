@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Model\User\Entity\User\Types;
+
+use App\Model\User\Entity\User\Objects\Id;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\GuidType;
+
+class IdType extends GuidType
+{
+    public const NAME = 'user_user_id';
+
+    /**
+     * @param $value
+     * @param AbstractPlatform $platform
+     * @return mixed|string
+     */
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    {
+        return $value instanceof Id ? $value->getValue() : $value;
+    }
+
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Id
+    {
+        return !empty($value) ? new Id($value) : null;
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+
+}
